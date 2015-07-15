@@ -1,3 +1,4 @@
+import controllers.AppController;
 import views.LifeFrame;
 
 /**
@@ -7,6 +8,7 @@ import views.LifeFrame;
  */
 public class LifeApp {
     public static void main(String[] args) {
-        LifeFrame gui = new LifeFrame();
+        AppController control = new AppController();
+        LifeFrame gui = new LifeFrame(control);
     }
 }

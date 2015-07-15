@@ -20,7 +20,7 @@ public class BoardModel {
      * Initializes board to be empty.
      * TODO potentially change this so that preconfigured locations can be added in.
      */
-    private void initBoardModel() {
+    public void initBoardModel() {
         for (int i = 0; i < ConfConstants.NUM_ROWS; i++) {
             for (int j = 0; j < ConfConstants.NUM_COLS; j++) {
                 board[i][j] = CellStatus.EMPTY;
@@ -48,22 +48,5 @@ public class BoardModel {
      */
     public void setCellStatus(Object value, int row, int col) {
         this.board[row][col] = value;
-    }
-
-    /**
-     * Switches the state of a cell. If cell is empty it becomes live and visa-versa.
-     *
-     * @param row Row of cell in question.
-     * @param col Column of cell in question.
-     */
-    public void changeCellStatus(int row, int col) {
-        CellStatus status = getCellStatus(row, col);
-
-        if (status == CellStatus.EMPTY) {
-            setCellStatus(CellStatus.LIVE, row, col);
-        }
-        else if (status == CellStatus.LIVE) {
-            setCellStatus(CellStatus.EMPTY, row, col);
-        }
     }
 }

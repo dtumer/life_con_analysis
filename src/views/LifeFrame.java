@@ -1,5 +1,6 @@
 package views;
 
+import controllers.AppController;
 import models.BoardModel;
 import models.ConfConstants;
 
@@ -7,6 +8,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -16,9 +19,9 @@ import java.awt.event.MouseEvent;
 public class LifeFrame extends JFrame {
 
     private Scene gameScene;
-    private BoardModel model;
-    private ControlPanel ctrlPanel;
+    private AppController controller;
     private JMenuBar menu;
+    private JPanel controlPanel;
     private int selectedRow;
     private int selectedCol;
 
@@ -32,7 +35,7 @@ public class LifeFrame extends JFrame {
             selectedCol = gameScene.getSelectedColumn();
 
             //System.out.println("ROW: " + selectedRow + ", COL: " + selectedCol);
-            model.changeCellStatus(selectedRow, selectedCol);
+            controller.changeBoardCellStatus(selectedRow, selectedCol);
             repaint();
         }
     };
@@ -40,10 +43,10 @@ public class LifeFrame extends JFrame {
     /**
      * Constructor for initializing the gui display for life.
      */
-    public LifeFrame() {
+    public LifeFrame(AppController controller) {
         super();
 
-        model = new BoardModel();
+        this.controller = controller;
 
         initLayout();
         pack();
@@ -71,7 +74,7 @@ public class LifeFrame extends JFrame {
 
         //set values associated with the scene panel including mouse listeners
         //and cell size
-        gameScene = new Scene(model, Color.DARK_GRAY);
+        gameScene = new Scene(controller.getGameModel().getBoardModel(), Color.DARK_GRAY);
         gameScene.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         gameScene.addMouseListener(myMouseListener);
         gameScene.setCellSelectionEnabled(false);
@@ -81,7 +84,7 @@ public class LifeFrame extends JFrame {
 
         //control panel setup
         initControlPanel();
-        getContentPane().add(ctrlPanel, BorderLayout.PAGE_END);
+        getContentPane().add(controlPanel, BorderLayout.PAGE_END);
     }
 
     /**
@@ -100,10 +103,22 @@ public class LifeFrame extends JFrame {
 
     /**
      * Initialize the bottom control panel.
-     * TODO add start and stop buttons for game
      */
     private void initControlPanel() {
-        this.ctrlPanel = new ControlPanel();
+        controlPanel = new JPanel();
+
+        JButton start = new JButton("Start");
+        start.addActionListener(e -> {
+            controller.run();
+        });
+
+        JButton stop = new JButton("Stop");
+        stop.addActionListener(e -> {
+            controller.stop();
+        });
+
+        controlPanel.add(start);
+        controlPanel.add(stop);
     }
 
     /**
@@ -113,9 +128,20 @@ public class LifeFrame extends JFrame {
     private void initMenu() {
         this.menu = new JMenuBar();
         JMenu file = new JMenu("File");
+        JMenu edit = new JMenu("Edit");
 
-        file.add("Edit");
+        /* EDIT MENU OPTIONS SETUP */
+        JMenuItem lifeReset = new JMenuItem("Reset Table");
+        lifeReset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.resetLifeTable();
+                repaint();
+            }
+        });
+        edit.add(lifeReset);
 
         menu.add(file);
+        menu.add(edit);
     }
 }
