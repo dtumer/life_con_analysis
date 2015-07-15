@@ -3,7 +3,11 @@ package controllers;
 import models.AppModel;
 import models.BoardModel;
 import models.CellStatus;
+import models.ConfConstants;
+import views.LifeFrame;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -14,7 +18,7 @@ public class AppController {
 
     //contains data about the application model
     private AppModel gameModel;
-    private boolean isRunning;
+    private LifeFrame gui;
     private Timer timer;
 
     /**
@@ -34,6 +38,14 @@ public class AppController {
     }
 
     /**
+     * TODO finish docs, also change gui to not have the action listeners in it.
+     * @param frame
+     */
+    public void setGUI(LifeFrame frame) {
+        this.gui = frame;
+    }
+
+    /**
      * Resets the view and clears all living matter in the table.
      */
     public void resetLifeTable() {
@@ -44,30 +56,25 @@ public class AppController {
      * Runs the application by flagging the model for execution.
      */
     public void run() {
-        this.isRunning = true;
         this.timer = new Timer();
 
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                getGameModel().calculateGeneration();
+                ArrayList<Point> changedCells = getGameModel().calculateGeneration();
+
+                for (int i = 0; i < changedCells.size(); i++) {
+                    changeBoardCellStatus(changedCells.get(i).x, changedCells.get(i).y);
+                }
+
+                gui.repaint();
             }
-        }, 0, 1000);
+        }, 0, ConfConstants.TIME_STEP);
     }
 
     public void stop() {
-        this.isRunning = false;
         timer.cancel();
     }
-
-    /**
-     * TODO finish this doc.
-     * @return
-     */
-    private boolean isRunning() {
-        return isRunning;
-    }
-
 
     /**
      * Handles changing the status of a cell on the board.
