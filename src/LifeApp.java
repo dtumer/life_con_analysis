@@ -10,5 +10,6 @@ public class LifeApp {
     public static void main(String[] args) {
         AppController control = new AppController();
         LifeFrame gui = new LifeFrame(control);
+        control.setGUI(gui);
     }
 }

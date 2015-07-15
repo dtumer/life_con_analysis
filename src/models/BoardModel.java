@@ -33,10 +33,15 @@ public class BoardModel {
      *
      * @param row Specified row in question.
      * @param col Specified column in question.
-     * @return Status of the cell in question.
+     * @return Status of the cell in question. Null if outside of scope
      */
     public CellStatus getCellStatus(int row, int col) {
-        return (CellStatus)this.board[row][col];
+        try {
+            return (CellStatus)board[row][col];
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
     /**
