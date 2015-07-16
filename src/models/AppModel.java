@@ -9,18 +9,29 @@ import java.util.HashMap;
  */
 public class AppModel {
     private BoardModel boardModel;
+    private BoardConfigManager boardManager;
 
     public AppModel() {
         boardModel = new BoardModel();
+        boardManager = new BoardConfigManager();
     }
 
     /**
      * Retrieves underlying board data model.
-     * TODO FINISH ALGORITHM
+     *
      * @return Underlying board model.
      */
     public BoardModel getBoardModel() {
         return boardModel;
+    }
+
+    /**
+     * Retrieves the board manager for the configuration of the board.
+     *
+     * @return The manager for the board configuration.
+     */
+    public BoardConfigManager getBoardManager() {
+        return boardManager;
     }
 
     /**

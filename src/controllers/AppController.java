@@ -1,35 +1,32 @@
 package controllers;
 
-import models.AppModel;
-import models.BoardModel;
-import models.CellStatus;
-import models.ConfConstants;
+import models.*;
 import views.LifeFrame;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
-
 /**
+ * Class that represents the main controller of the application. This controller hands off access to the models
+ * as necessary and updates the view.
+ *
  * Created by Deniz on 7/14/2015.
  */
 public class AppController {
 
-    //contains data about the application model
     private AppModel gameModel;
+    private boolean isAppCalcRunning;
     private LifeFrame gui;
-    private Timer timer;
+    private LifeAppTimeScheduler scheduler;
 
     /**
-     * TODO finish docs
+     * Constructor for creating a new instance of the app controller.
      */
     public AppController() {
         gameModel = new AppModel();
+        isAppCalcRunning = false;
+        scheduler = new LifeAppTimeScheduler();
     }
 
     /**
-     * Retrieces main app model class.
+     * Retrieves main app model class.
      *
      * @return The representation of the main model class.
      */
@@ -38,11 +35,16 @@ public class AppController {
     }
 
     /**
-     * TODO finish docs, also change gui to not have the action listeners in it.
-     * @param frame
+     * Sets the gui for the controller.
+     *
+     * @param frame GUI frame of the application.
      */
     public void setGUI(LifeFrame frame) {
         this.gui = frame;
+    }
+
+    public void update() {
+        gui.repaint();
     }
 
     /**
@@ -55,25 +57,32 @@ public class AppController {
     /**
      * Runs the application by flagging the model for execution.
      */
-    public void run() {
-        this.timer = new Timer();
+    public void run(int interval) {
+        //check if generation calculations are already running.
+        //if they are not then set the original board state.
+        if (!this.isAppCalcRunning) {
+            getGameModel().getBoardManager().setBoardConfig(getGameModel().getBoardModel().deepCopyBoardData());
+            this.isAppCalcRunning = true;
+        }
 
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                ArrayList<Point> changedCells = getGameModel().calculateGeneration();
 
-                for (int i = 0; i < changedCells.size(); i++) {
-                    changeBoardCellStatus(changedCells.get(i).x, changedCells.get(i).y);
-                }
-
-                gui.repaint();
-            }
-        }, 0, ConfConstants.TIME_STEP);
+        scheduler.start(new RunTask());
     }
 
+    /**
+     * Pauses the simulation by cancelling the timer.
+     */
+    public void pause() {
+        scheduler.stop();
+    }
+
+    /**
+     * Stops the simulation and resets to original placement of cells.
+     */
     public void stop() {
-        timer.cancel();
+        scheduler.stop();
+        getGameModel().getBoardModel().setBoardData(getGameModel().getBoardManager().getBoardConfig());
+        this.isAppCalcRunning = false;
     }
 
     /**

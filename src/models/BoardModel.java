@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Arrays;
+
 /**
  * Created by Deniz on 7/14/2015.
  */
@@ -29,6 +31,19 @@ public class BoardModel {
     }
 
     /**
+     * Retrieves the board data for storing when the run button is clicked.
+     *
+     * @return The data of the original board.
+     */
+    public Object[][] getBoardData() {
+        return board;
+    }
+
+    public void setBoardData(Object[][] boardData) {
+        this.board = boardData;
+    }
+
+    /**
      * Retrieves the state of a cell on the board.
      *
      * @param row Specified row in question.
@@ -53,5 +68,20 @@ public class BoardModel {
      */
     public void setCellStatus(Object value, int row, int col) {
         this.board[row][col] = value;
+    }
+
+    /**
+     * Computes a deep copy of the board array for utilizing in the "save" feature of the application.
+     *
+     * @return A deep copy of the board configuration.
+     */
+    public CellStatus[][] deepCopyBoardData() {
+        Object[][] boardCopy = new CellStatus[ConfConstants.NUM_ROWS][ConfConstants.NUM_COLS];
+
+        for (int i = 0; i < ConfConstants.NUM_COLS; i++) {
+            boardCopy[i] = Arrays.copyOf(board[i], ConfConstants.NUM_ROWS);
+        }
+
+        return (CellStatus[][])boardCopy;
     }
 }

@@ -3,6 +3,7 @@ package views;
 import controllers.AppController;
 import models.BoardModel;
 import models.ConfConstants;
+import models.RunMode;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -74,7 +75,7 @@ public class LifeFrame extends JFrame {
 
         //set values associated with the scene panel including mouse listeners
         //and cell size
-        gameScene = new Scene(controller.getGameModel().getBoardModel(), Color.DARK_GRAY);
+        gameScene = new Scene(controller.getGameModel().getBoardModel(), ConfConstants.BKGD_COLOR);
         gameScene.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         gameScene.addMouseListener(myMouseListener);
         gameScene.setCellSelectionEnabled(false);
@@ -107,18 +108,50 @@ public class LifeFrame extends JFrame {
     private void initControlPanel() {
         controlPanel = new JPanel();
 
-        JButton start = new JButton("Start");
-        start.addActionListener(e -> {
-            controller.run();
+        JToggleButton startPause = new JToggleButton("Start");
+        startPause.addActionListener(e -> {
+            if (e.getActionCommand().equals("Start")) {
+                controller.run(ConfConstants.TIME_STEP);
+                startPause.setText("Pause");
+            }
+            else {
+                controller.pause();
+                startPause.setText("Start");
+            }
         });
 
+        //stop button configuration
         JButton stop = new JButton("Stop");
         stop.addActionListener(e -> {
             controller.stop();
+            startPause.setText("Start");
+
+            repaint();
         });
 
-        controlPanel.add(start);
+        //reset button configuration
+        JButton reset = new JButton("Reset");
+        reset.addActionListener(e -> {
+            controller.resetLifeTable();
+            startPause.setText("Start");
+
+            repaint();
+        });
+
+        JLabel generationIntervalLabel = new JLabel("Time Interval");
+        JSpinner generationInterval = new JSpinner();
+        generationInterval.setValue(ConfConstants.TIME_STEP);
+        generationInterval.setPreferredSize(new Dimension(100, 30));
+        generationInterval.addChangeListener(l -> {
+            controller.stop();
+            controller.run((Integer)generationInterval.getValue());
+        });
+
+        controlPanel.add(startPause);
         controlPanel.add(stop);
+        controlPanel.add(reset);
+        controlPanel.add(generationIntervalLabel);
+        controlPanel.add(generationInterval);
     }
 
     /**
