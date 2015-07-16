@@ -58,6 +58,10 @@ public class AppController {
      * Runs the application by flagging the model for execution.
      */
     public void run(int interval) {
+        RunTask compute = new RunTask(this);
+
+        System.out.println("Starting generational calculations...");
+
         //check if generation calculations are already running.
         //if they are not then set the original board state.
         if (!this.isAppCalcRunning) {
@@ -65,8 +69,7 @@ public class AppController {
             this.isAppCalcRunning = true;
         }
 
-
-        scheduler.start(new RunTask());
+        scheduler.start(compute, interval);
     }
 
     /**

@@ -108,6 +108,7 @@ public class LifeFrame extends JFrame {
     private void initControlPanel() {
         controlPanel = new JPanel();
 
+        //start pause button configuration
         JToggleButton startPause = new JToggleButton("Start");
         startPause.addActionListener(e -> {
             if (e.getActionCommand().equals("Start")) {
@@ -132,26 +133,16 @@ public class LifeFrame extends JFrame {
         //reset button configuration
         JButton reset = new JButton("Reset");
         reset.addActionListener(e -> {
+            controller.stop();
             controller.resetLifeTable();
             startPause.setText("Start");
 
             repaint();
         });
 
-        JLabel generationIntervalLabel = new JLabel("Time Interval");
-        JSpinner generationInterval = new JSpinner();
-        generationInterval.setValue(ConfConstants.TIME_STEP);
-        generationInterval.setPreferredSize(new Dimension(100, 30));
-        generationInterval.addChangeListener(l -> {
-            controller.stop();
-            controller.run((Integer)generationInterval.getValue());
-        });
-
         controlPanel.add(startPause);
         controlPanel.add(stop);
         controlPanel.add(reset);
-        controlPanel.add(generationIntervalLabel);
-        controlPanel.add(generationInterval);
     }
 
     /**

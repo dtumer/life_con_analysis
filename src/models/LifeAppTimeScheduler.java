@@ -9,9 +9,9 @@ import java.util.TimerTask;
 public class LifeAppTimeScheduler {
     private Timer timer;
 
-    public void start(TimerTask task) {
+    public void start(TimerTask task, int interval) {
         timer = new Timer();
-        timer.schedule(task, 0, 100);
+        timer.schedule(task, 0, interval);
     }
 
     public void stop() {
