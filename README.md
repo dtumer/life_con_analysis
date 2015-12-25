@@ -10,7 +10,12 @@ To read more about Conway's Game Of Life please visit the [Conway Life Community
 
 ##Installation##
 
-To install this program please download the source jar and run it.
+To install this program please download the project as a ZIP from the following [Link](https://github.com/dtumer/life_con_analysis/archive/master.zip) or by clicking the "Download Zip" button at the top right of this page. Once downloaded open the JAR file under the "out/artifacts/life_con_analysis_jar" directory. That's it! Enjoy the simulation!
+
+
+##Bugs##
+
+There could be bugs in the program. If you find a bug please report it to me through the issue tracker for this repository. Thank you!
 
 
 ##License##
