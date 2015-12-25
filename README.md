@@ -13,7 +13,7 @@ To read more about Conway's Game Of Life please visit the [Conway Life Community
 To install this program please download the source jar and run it.
 
 
-##Lisence##
+##License##
 
 This program and all of its source code is copyrighted by Deniz Tumer and cannot be replicated or distributed.
 
