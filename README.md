@@ -3,7 +3,7 @@
 
 ##Description##
 
-Conway's Game Of Life is a mathematic population simulator. It involves an infinitely large board with an initial population configuration. When the play button is clicked the population begins "evolving" and the population can then be observed throughout the phases of its lifetime. The lifetime of the program can be finite or inifinite depending on the initial configuration of the simulation board.
+Conway's Game Of Life is a mathematic population simulator. It involves an infinitely large board with an initial population configuration. When the play button is clicked the population begins "evolving" and the population can then be observed throughout the phases of its lifetime. The lifetime of the program can be finite or inifinite depending on the initial configuration of the simulation board. This version of Game of Life is implemented using Java and the Observer/Observable design pattern.
 
 To read more about Conway's Game Of Life please visit the [Conway Life Community](http://www.conwaylife.com/).
 
